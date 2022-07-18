@@ -20,11 +20,14 @@ head(data)
  Mean   :5.012   Mean   :51.48  
  3rd Qu.:7.400   3rd Qu.:75.00  
  Max.   :9.200   Max.   :95.00  
+
  #ploting both variables i.e. Scores and Hours
 plot(x = data$Hours, y = data$Scores, xlab="Hours", ylab="Scores", main = "Scores Vs Hours")
+
 #Linear Regression 
 data.regression <- lm(Scores ~ Hours, data=data)
 abline(data.regression, col="red")
+
 #summary of data.regression
 summary(data.regression)
 Call:
@@ -41,8 +44,10 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 Residual standard error: 5.603 on 23 degrees of freedom
 Multiple R-squared:  0.9529,	Adjusted R-squared:  0.9509 
 F-statistic: 465.8 on 1 and 23 DF,  p-value: < 2.2e-16
+
 #import library
 library(e1071)
+
 StudentD <- data
 head(StudentD)
 Hours Scores
@@ -60,8 +65,7 @@ boxplot(StudentD$Scores, main="Scores(%)")
 par(mfrow=c(1,2))
 plot(density(StudentD$Hours) , main="Density of Time(h)" , ylab="frequency" , sub=paste0("Skewness : ", round(skewness(StudentD$Hours),2)))
 polygon(density(StudentD$Hours), col="blue")
-plot(density(StudentD$Scores), main="Density of Scores(%)", ylab="frequency", 
-     sub=paste("Skewness:", round(skewness(StudentD$Scores),2)))
+plot(density(StudentD$Scores), main="Density of Scores(%)", ylab="frequency", sub=paste("Skewness:", round(skewness(StudentD$Scores),2)))
 polygon(density(StudentD$Scores), col="pink")
 
 #Correlation
@@ -72,6 +76,7 @@ cor(StudentD$Hours, StudentD$Scores)
 #Create Training and Test data
 set.seed(100)    #Setting seed to reproduce results of random sampling
 RowIndex <- sample(1:nrow(StudentD), 0.8*nrow(StudentD))
+
 #trainig data
 TrainingD <- StudentD[RowIndex, ]    
 #test data
@@ -80,6 +85,7 @@ testD <- StudentD[-RowIndex, ]
 #Model Building and Evaluation
 mod <- lm(Hours ~ Scores, data=TrainingD)
 summary(mod)
+
 Call:
 lm(formula = Hours ~ Scores, data = TrainingD)
 Residuals:
@@ -119,11 +125,12 @@ head(pred)
 cor(pred)    # correlation between actuals and predictors
 
            actuals predicteds
-actuals             1          1
+actuals          1          1
 predicteds       1          1
 min_max_accuracy <- mean(apply(pred, 1, min) / apply(pred, 1, max))
 min_max_accuracy
 [1] 0.09750637
+
 # Mean Absolute Percentage Error Calculation
 mean_abs_per_er <- mean(abs((pred$predicteds - pred$actuals))/pred$actuals) 
 mean_abs_per_er
@@ -133,17 +140,3 @@ mean_abs_per_er
 predict(mod, data.frame(Scores=c(9.25)))
         1 
 0.8413815
-
-
-
-
-
-
-
-
-
-
-
-
-
-
